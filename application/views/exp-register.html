@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>soksok Prototype</title>
+
+    <!-- 부트스트랩 포함 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <!-- jqeury 포함 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+</head>
+<style>
+    p {
+        color: #FDE5D4;
+    }
+
+    ;
+
+    label {
+        color: #FDE5D4;
+    }
+</style>
+
+<body style="background-color: #001524; color: #FDE5D4;">
+    <div class="contrainer">
+            <!-- 해더, nav바 -->
+            <div class="container-md">
+                <br>
+                <h1 style="color:#FDE5D4; "> 캠페인 등록 </h1>
+                <br>
+            </div>
+            <!-- 컨텐츠 -->
+            <div class="container-md" style="width:80%">
+                <!-- id, pw 입력폼 -->
+                <label for="r_cert" class="form-label">인증서 : </label><br>
+                <input type="text" class="form-control" id="r_cert"><br>
+                <label for="r_cid" class="form-label">캠페인 ID : </label><br>
+                <input type="text" class="form-control" id="r_cid"><br>
+                <label for="r_did" class="form-label">기부단체 id : </label><br>
+                <input type="text" class="form-control" id="r_did"><br>
+
+                <button class="btn btn-light" id="register-btn">캠페인 등록</button>
+                &nbsp;&nbsp;
+                <a href="/" class="btn btn-light">돌아가기</a>
+                <br><br>
+
+            </div>
+            <div class="container-md" id="register-result">
+
+            </div>
+            <!-- 푸터 -->
+            <div class="container-md">
+                <br><br>
+            </div>
+    </div>
+</body>
+<script>
+    $("#register-btn").click(function () {
+
+        const r_cert = $("#r_cert").val();
+        const r_cid = $("#r_cid").val();
+        const r_did = $("#r_did").val();
+
+
+        console.log("Campaign register button clicked : ", r_cert, r_cid, r_did);
+
+
+        $.post('/campaign', { r_cert, r_cid, r_did }, function (data, status) {
+
+            $("#register-result").empty();
+
+            var html_table = '<table class="table table-hover"><thead><tr><th scope="col" width="30%">&nbsp</th><th scope="col" width="70%">VALUE</th></tr></thead>';
+
+            html_table += `<tbody><tr><th>RESULT</td><td>${data.result}</td></tr>`;
+
+            if (data.result == 'success') {
+                html_table += `<tr><th>MESSAGE</td><td>${data.message}</td></tr></tbody></table>`;
+            } else {
+                html_table += `<tr><th>ERROR</td><td>${data.error}</td></tr></tbody></table>`;
+            }
+
+            $("#propose-result").append(html_table);
+
+        })
+    });
+
+</script>
+
+</html>
